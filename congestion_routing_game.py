@@ -185,9 +185,13 @@ class CongestionRoutingGame:
             # Check for convergence
             if current_profile == old_profile:
                 print(f"Converged after {iteration + 1} iterations")
+                converged = True
+                iterations = iteration + 1
                 break
         else:
             print(f"Did not converge after {max_iterations} iterations")
+            converged = False
+            iterations = max_iterations
         
         # Calculate final costs
         route_counts = [0] * self.num_routes
@@ -204,7 +208,10 @@ class CongestionRoutingGame:
             'strategy_profile': current_profile,
             'route_distribution': route_counts,
             'agent_costs': agent_costs,
-            'total_cost': sum(agent_costs)
+            'total_cost': sum(agent_costs),
+            'converged': converged,
+            'iterations': iterations,
+            'equilibrium': current_profile  # Add this for compatibility with UI
         }
     
     def _find_best_response(self, agent_idx, current_profile):
